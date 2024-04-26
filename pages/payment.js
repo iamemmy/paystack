@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import PaystackPop from '@paystack/inline-js';
 
 const Payment = () => {
     const publicKey = 'pk_test_94dd5e296fe49c9e42911130fbd3e3f3ce6a1653';
     const [email, setEmail] = useState('');
 
-    const payWithPaystack = (e) => {
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const payWithPaystack = async (e) => {
         e.preventDefault();
-        const paystack = new PaystackPop();
+        const paystackPop = (await import('@paystack/inline-js')).default;
+        const paystack = new paystackPop();
         paystack.newTransaction({
             key: publicKey,
             amount: 2000000, // Amount in kobo (₦20,000)
@@ -21,10 +25,6 @@ const Payment = () => {
                 alert("You have canceled the transaction");
             }
         });
-    };
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
     };
 
     return (
